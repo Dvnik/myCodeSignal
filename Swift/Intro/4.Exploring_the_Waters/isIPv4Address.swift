@@ -16,14 +16,13 @@ For inputString = ".254.255.0", the output should be isIPv4Address(inputString) 
 There is no first number.
 
 檢查輸入的字串是否為合格的ipv4字串
-目前想不出如何判斷「前面補0的數字就不是合法的數字段」，先上傳
+上傳之後突然想到一個很土炮的解決方案，就是「只要2位數以上的String數字，直接檢查字首」
+這樣就完成題目了
 */
 
 func isIPv4Address(inputString: String) -> Bool
 {
     var result = true
-    // Tests passed: 18/21.
-    // Because my function can't check ["00" or "01" not a number].
     // if ipv4 address no 4 part, it is not ipv4 address
     // check dot count
     var dotCount = 0
@@ -47,13 +46,21 @@ func isIPv4Address(inputString: String) -> Bool
     // Check IP Range
     for ipPart in splitStr
     {
-        if let ipAddress = Int(ipPart)
+        if result == false// if check result is change to false, break for-loop
         {
-            print(ipAddress)
+            break
+        }
+        if let ipAddress = Int(ipPart)// check is enable truninto Int
+        {
+            // check first character if string count over 1
+            if ipPart.count > 1 && ipPart.first == "0"
+            {
+                result = false
+            }
+            // check address reange is ipv4
             if ipAddress < 0 || ipAddress > 255
             {
                 result = false
-                break
             }
         }
         else
@@ -61,8 +68,6 @@ func isIPv4Address(inputString: String) -> Bool
             result = false
         }
     }
-
-
     return result
-
 }
+
